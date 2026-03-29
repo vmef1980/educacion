@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Cargando...</title>
     
+    <link rel="icon" type="image/x-icon" href="img/Tech-v1.ico">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,9 +18,10 @@
             --secundario: #00cec9;
             --fondo: #f0f4f8;
             --blanco: #ffffff;
-            --acierto: #55efc4;
-            --error: #ff7675;
+            --acierto: #00ffb3;
+            --error: #ff4757;
             --neon-color: #a29bfe;
+            --neon-brillo: rgba(162, 155, 254, 0.8);
         }
 
         body {
@@ -27,233 +30,282 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            user-select: none; 
+            -webkit-user-select: none;
+            overflow-x: hidden; /* Evita scroll horizontal */
         }
 
         /* --- LOGO NEÓN --- */
         .navbar {
             background: var(--blanco) !important;
             border-bottom: 5px solid var(--primario);
-            padding: 15px 25px;
+            padding: 10px 15px;
         }
         .navbar-brand img { 
-            width: 70px; /* Más grande */
+            width: 50px; /* Tamaño base móvil */
             height: auto;
             border-radius: 12px; 
-            margin-right: 15px;
-            filter: drop-shadow(0 0 8px var(--neon-color)); /* Efecto Neón */
+            margin-right: 10px;
+            filter: drop-shadow(0 0 12px var(--primario)) drop-shadow(0 0 5px var(--secundario));
             transition: 0.5s;
         }
-        .navbar-brand:hover img {
-            filter: drop-shadow(0 0 15px var(--primario));
-            transform: scale(1.05);
+
+        /* Ajuste de logo para pantallas grandes */
+        @media (min-width: 768px) {
+            .navbar-brand img { width: 70px; margin-right: 15px; }
+            .navbar { padding: 15px 25px; }
         }
 
-        /* --- CARDS TIPO SAAS --- */
+        .navbar-brand:hover img {
+            filter: drop-shadow(0 0 20px var(--secundario)) drop-shadow(0 0 10px var(--blanco));
+            transform: scale(1.05) rotate(-5deg);
+        }
+
+        /* --- CARDS RESPONSIVAS --- */
         .card-menu {
             cursor: pointer;
             border: 4px solid var(--primario);
             border-radius: 30px;
-            transition: 0.3s;
+            transition: 0.4s;
             background: white;
-            padding: 30px;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.15);
+            padding: 20px; /* Menos padding en móvil */
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.1);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
         }
+        
+        @media (min-width: 768px) {
+            .card-menu { padding: 30px; }
+        }
+
         .card-menu:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(108, 92, 231, 0.3);
             border-color: var(--secundario);
+            box-shadow: 0 0 25px var(--neon-brillo), 0 0 10px rgba(0, 206, 201, 0.5);
         }
-        .icon-lg { font-size: 4rem; display: block; margin-bottom: 10px; }
+        
+        .card-menu::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(108, 92, 231, 0.1) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: 0.4s;
+        }
+        .card-menu:hover::after { opacity: 1; }
 
-        /* --- GAME BOX PROFESIONAL --- */
+        .icon-lg { font-size: 3rem; display: block; margin-bottom: 10px; transition: 0.3s; }
+        @media (min-width: 768px) { .icon-lg { font-size: 4rem; } }
+
+        .card-menu:hover .icon-lg { transform: scale(1.1); filter: drop-shadow(0 0 10px var(--secundario)); }
+
+        /* --- GAME BOX ADAPTIVO --- */
         .game-box {
             background: white;
-            border-radius: 50px;
-            border: 10px solid var(--primario);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-            padding: 50px;
+            border-radius: 30px; /* Más sutil en móvil */
+            border: 6px solid var(--primario);
+            box-shadow: 0 0 40px var(--neon-brillo), 0 30px 60px rgba(0,0,0,0.12);
+            padding: 25px; /* Menos padding en móvil */
             max-width: 600px;
-            width: 100%;
-            margin: 40px auto;
+            width: 95%; /* Ocupa casi todo el ancho en móvil */
+            margin: 20px auto;
             text-align: center;
             position: relative;
+            animation: neonPulse 3s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .game-box { border-radius: 50px; border: 10px solid var(--primario); padding: 50px; margin: 40px auto; width: 100%; }
+        }
+        
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 20px var(--neon-brillo), 0 30px 60px rgba(0,0,0,0.12); }
+            50% { box-shadow: 0 0 40px var(--primario), 0 30px 60px rgba(0,0,0,0.15); }
+            100% { box-shadow: 0 0 20px var(--neon-brillo), 0 30px 60px rgba(0,0,0,0.12); }
         }
 
         .pregunta {
-            font-size: 6rem;
+            font-size: 3.5rem; /* Ajustado para móvil */
             font-weight: 900;
             color: var(--primario);
-            letter-spacing: -2px;
+            letter-spacing: -1px;
+            text-shadow: 0 0 15px var(--neon-brillo);
+            margin: 15px 0;
         }
+        @media (min-width: 768px) { .pregunta { font-size: 6rem; letter-spacing: -2px; } }
 
         .btn-fun {
             background: var(--primario);
             color: white;
             border: none;
-            padding: 18px 50px;
-            font-size: 1.8rem;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             font-weight: 900;
-            border-radius: 30px;
+            border-radius: 25px;
             box-shadow: 0 8px 0 #4834d4;
             transition: 0.2s;
+            text-transform: uppercase;
+            width: 100%; /* Full width en móvil */
         }
-        .btn-fun:active { transform: translateY(4px); box-shadow: 0 4px 0 #4834d4; }
+        @media (min-width: 768px) {
+            .btn-fun { padding: 18px 50px; font-size: 1.8rem; border-radius: 30px; width: auto; }
+        }
 
-        /* --- SECCIÓN COMERCIAL / PRODUCTO --- */
+        /* --- INFO SECTION --- */
         .info-section {
-            background: var(--primario);
+            background: linear-gradient(135deg, var(--primario), #4834d4);
             color: white;
-            padding: 80px 20px;
-            border-radius: 50px 50px 0 0;
-            margin-top: 100px;
+            padding: 40px 15px;
+            border-radius: 30px 30px 0 0;
+            margin-top: 50px;
         }
-        .feature-card {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 20px;
-            height: 100%;
-            border: 1px solid rgba(255,255,255,0.2);
+        @media (min-width: 768px) {
+            .info-section { padding: 80px 20px; border-radius: 50px 50px 0 0; margin-top: 100px; }
         }
 
-        /* --- WHATSAPP --- */
         .wa-float {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            right: 20px;
             background: #25d366;
             color: white;
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 35px;
+            font-size: 30px;
             box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
             text-decoration: none;
             z-index: 1000;
         }
 
-        .btn-exit {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            background: #ff7675;
-            color: white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border: none;
+        #ans {
+            color: var(--primario);
+            text-shadow: 0 0 10px var(--neon-brillo);
+            font-size: 3rem;
+            width: 150px;
         }
+        @media (min-width: 768px) { #ans { font-size: 4rem; width: 200px; } }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;"> 
 
 <a href="#" id="wa-link" target="_blank" class="wa-float animate__animated animate__bounceIn infinite">
     <i class="fab fa-whatsapp"></i>
 </a>
 
 <nav class="navbar shadow-sm sticky-top">
-    <div class="container">
+    <div class="container d-flex justify-content-between align-items-center">
         <a class="navbar-brand d-flex align-items-center" href="#" onclick="irAlMenu()">
             <img id="brand-logo" src="img/Tech-v1.ico" alt="Logo">
             <div class="d-flex flex-column">
-                <span id="brand-name" class="fw-bold fs-3" style="color: var(--primario); line-height: 1;"></span>
-                <small class="text-muted fs-6">Plataforma Educativa</small>
+                <span id="brand-name" class="fw-bold fs-5 fs-md-3" style="color: var(--primario); line-height: 1;"></span>
+                <small class="text-muted d-none d-sm-block" style="font-size: 0.7rem;">Gamificación Matemática</small>
             </div>
         </a>
-        <button class="btn btn-outline-primary fw-bold rounded-pill px-4" onclick="document.getElementById('contacto').scrollIntoView()">Pedir Información</button>
+        <button class="btn btn-outline-primary btn-sm btn-md-lg fw-bold rounded-pill px-3" onclick="document.getElementById('contacto').scrollIntoView()">Suscripciones</button>
     </div>
 </nav>
 
-<div class="container my-5">
-    
-    <div id="menu" class="row g-4 text-center animate__animated animate__fadeIn">
-        <div class="col-12 mb-4">
-            <h1 class="display-3 fw-black animate__animated animate__bounceInDown">🚀 DESAFÍO MENTAL</h1>
-            <p class="fs-4 text-muted">Selecciona tu nivel para comenzar el entrenamiento</p>
-        </div>
-        </div>
-
-    <div id="juego" class="game-box animate__animated animate__zoomIn" style="display: none;">
-        <button class="btn-exit" onclick="irAlMenu()">
-            <i class="fas fa-times"></i>
-        </button>
-
-        <div class="d-flex justify-content-around mb-4">
-            <div class="p-3">
-                <h4 class="text-success fw-bold mb-0">ACIERTOS</h4>
-                <div class="fs-2" id="aciertos">0</div>
-            </div>
-            <div class="p-3">
-                <h4 class="text-danger fw-bold mb-0">FALLOS</h4>
-                <div class="fs-2" id="fallos">0</div>
-            </div>
-        </div>
-
-        <div class="text-muted mb-2 fw-bold">PROGRESO DEL RETO: <span id="num-intento">1</span>/10</div>
-        
-        <div id="q-container" class="pregunta animate__animated">
-            <span id="n1">0</span> <span id="op">+</span> <span id="n2">0</span>
-        </div>
-
-        <input type="number" id="ans" class="input-mega border-0 border-bottom" placeholder="?" autocomplete="off" style="font-size: 4rem; width: 200px; outline: none;">
-        <br>
-        <button onclick="procesar()" class="btn-fun mt-4">ENVIAR RESPUESTA ✨</button>
-
-        <div id="feedback" class="mt-4 fw-bold fs-3 animate__animated" style="height: 60px;"></div>
-
-        <div class="progress mt-4" style="height: 15px; border-radius: 20px;">
-            <div id="bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 0%"></div>
+<div class="container my-4 my-md-5">
+    <div id="menu" class="row g-3 g-md-4 text-center animate__animated animate__fadeIn">
+        <div class="col-12 mb-2 mb-md-4">
+            <h1 class="display-5 display-md-3 fw-black">🧩 DESAFÍO MENTAL </h1>
+            <p class="fs-6 fs-md-4 text-muted">Potencia tu agilidad mental en tiempo real</p>
         </div>
     </div>
 
+    <div id="juego" class="game-box animate__animated animate__zoomIn" style="display: none;">
+        <button class="btn btn-danger position-absolute top-0 end-0 m-3 m-md-4 rounded-circle btn-sm" onclick="irAlMenu()"><i class="fas fa-times"></i></button>
+        <div class="d-flex justify-content-around mb-3 mb-md-4">
+            <div class="p-1 p-md-2"><h6 class="text-success fw-bold mb-0">ACIERTOS</h6><div class="fs-3 fs-md-2" id="aciertos">0</div></div>
+            <div class="p-1 p-md-2"><h6 class="text-danger fw-bold mb-0">FALLOS</h6><div class="fs-3 fs-md-2" id="fallos">0</div></div>
+        </div>
+        <div class="text-muted mb-2 fw-bold" style="font-size: 0.8rem;">PROGRESO: <span id="num-intento">1</span>/10</div>
+        <div id="q-container" class="pregunta animate__animated"><span id="n1">0</span> <span id="op">+</span> <span id="n2">0</span></div>
+        <input type="number" id="ans" class="text-center border-0 border-bottom border-primary" placeholder="?" style="outline: none; background: transparent;">
+        <br>
+        <button id="btn-env" onclick="procesar()" class="btn-fun mt-4">COMPROBAR ✨</button>
+        <div id="feedback" class="mt-3 mt-md-4 fw-bold fs-4 fs-md-3 animate__animated" style="height: 50px;"></div>
+        <div class="progress mt-3 mt-md-4" style="height: 12px; border-radius: 20px;"><div id="bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 0%"></div></div>
+    </div>
+
     <div id="final" class="game-box animate__animated animate__tada" style="display: none;">
-        <h2 class="display-3 fw-bold mb-3">¡RESULTADO!</h2>
-        <div id="score" class="display-4 mb-4"></div>
-        <p id="msg-final" class="fs-4 mb-4"></p>
-        <button onclick="irAlMenu()" class="btn-fun w-100">VOLVER AL PANEL</button>
+        <h2 class="display-6 display-md-3 fw-bold mb-3">¡SESIÓN COMPLETADA!</h2>
+        <div id="score" class="display-5 display-md-4 mb-3 mb-md-4" style="color: var(--primario); text-shadow: 0 0 10px var(--neon-brillo);"></div>
+        <p id="msg-final" class="fs-6 fs-md-4 mb-4"></p>
+        <button onclick="irAlMenu()" class="btn-fun w-100">NUEVO ENTRENAMIENTO</button>
     </div>
 </div>
 
 <section id="contacto" class="info-section">
+    <div class="container text-center mb-4 mb-md-5">
+        <h2 class="display-6 display-md-3 fw-bold">La Tecnología detrás del Genio</h2>
+        <p class="fs-6 fs-md-4">Algoritmos de generación aleatoria para prácticas únicas.</p>
+    </div>
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 mb-5">
-                <h2 class="display-4 fw-bold mb-4">¿Eres un Colegio?</h2>
-                <p class="fs-5 mb-4">EduGenios es la plataforma #1 de Guatemala para el refuerzo lógico-matemático. Licencias personalizadas para instituciones educativas.</p>
-                <div class="row g-3">
-                    <div class="col-6"><div class="feature-card">⭐ <b>Reportes</b> de avance.</div></div>
-                    <div class="col-6"><div class="feature-card">⭐ <b>Personalización</b> total.</div></div>
+        <div class="row g-3 g-md-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="fas fa-microchip fa-2x mb-2 text-warning" style="filter: drop-shadow(0 0 5px #f1c40f);"></i>
+                    <h5 class="fw-bold">Algoritmo Aleatorio</h5>
+                    <p class="small">Nunca repetirás la misma sesión. El sistema genera miles de combinaciones.</p>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="fas fa-bolt fa-2x mb-2 text-info" style="filter: drop-shadow(0 0 5px #00cec9);"></i>
+                    <h5 class="fw-bold">Feedback Inmediato</h5>
+                    <p class="small">Refuerzo positivo basado en psicología para aumentar la retención.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="fas fa-chart-line fa-2x mb-2 text-success" style="filter: drop-shadow(0 0 5px #2ecc71);"></i>
+                    <h5 class="fw-bold">Control de Progreso</h5>
+                    <p class="small">Métricas precisas para identificar áreas de oportunidad en tiempo real.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5 align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <h2 class="display-6 fw-bold mb-3">¿Deseas EduGenios en tu colegio?</h2>
+                <p class="fs-6">Seguimiento por alumno y niveles según el CNB de Guatemala.</p>
+            </div>
             <div class="col-md-6">
-                <div class="bg-white p-5 rounded-4 shadow-lg text-dark">
-                    <h3 class="fw-bold mb-4">Solicitar Demo</h3>
-                    <input type="text" id="nombre-inst" class="form-control mb-3 p-3" placeholder="Nombre de la Institución">
-                    <input type="text" id="tel-inst" class="form-control mb-3 p-3" placeholder="Teléfono de contacto">
-                    <button class="btn btn-primary w-100 p-3 fw-bold" onclick="pedirDemo()">CONTACTAR CON UN ASESOR</button>
+                <div class="bg-white p-4 p-md-5 rounded-4 shadow-lg text-dark mt-4 mt-md-0">
+                    <h4 class="fw-bold mb-4 text-center">Plan Institucional</h4>
+                    <input type="text" id="nombre-inst" class="form-control mb-3 p-2 p-md-3" placeholder="Institución Educativa">
+                    <input type="text" id="tel-inst" class="form-control mb-3 p-2 p-md-3" placeholder="WhatsApp Directivo">
+                    <button class="btn btn-primary w-100 p-2 p-md-3 fw-bold" onclick="pedirDemo()">SOLICITAR COTIZACIÓN</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<footer class="bg-white py-4 text-center mt-auto border-top">
-    <p class="text-muted mb-0">© 2026 <b>EduGenios | Rompecabezas de Guatemala</b>. Todos los derechos reservados.</p>
+<footer class="bg-white py-3 py-md-4 text-center mt-auto border-top px-2">
+    <p class="text-muted mb-0 small">© 2026 <b>EduGenios | Rompecabezas de Guatemala</b>. Alta Tecnología Educativa.</p>
 </footer>
 
 <script>
+    // Se mantiene intacta toda la lógica original
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123) return false; 
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; 
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false; 
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; 
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
+    };
+
     const MARCA = {
         nombre: "EduGenios | Rompecabezas de Guatemala",
         logo: "img/Tech-v1.ico", 
         whatsapp: "50241084481",
-        waMensaje: "¡Hola! Vi el juego de matemáticas y quiero información para mi colegio.",
+        waMensaje: "¡Hola! He probado el simulador EduGenios y me interesa adquirir licencias para mi colegio.",
         intentosTotales: 10
     };
 
@@ -272,21 +324,18 @@
 
     window.onload = () => {
         document.getElementById('brand-name').innerText = MARCA.nombre;
-        document.getElementById('brand-logo').src = MARCA.logo;
-        document.getElementById('page-title').innerText = MARCA.nombre;
+        document.getElementById('page-title').innerText = MARCA.nombre; 
         document.getElementById('wa-link').href = `https://wa.me/${MARCA.whatsapp}?text=${encodeURIComponent(MARCA.waMensaje)}`;
-        
         const menuUI = document.getElementById('menu');
         CATEGORIAS.forEach(cat => {
             menuUI.innerHTML += `
                 <div class="col-md-4 col-6">
                     <div class="card-menu animate__animated animate__zoomIn" onclick="iniciar('${cat.id}')">
                         <span class="icon-lg">${cat.icon}</span>
-                        <h4 class="fw-bold">${cat.titulo}</h4>
-                        <small class="text-muted">Entrenar ahora</small>
+                        <h6 class="fw-bold">${cat.titulo}</h6>
+                        <small class="text-muted d-none d-sm-block">Iniciar Módulo</small>
                     </div>
-                </div>
-            `;
+                </div>`;
         });
     };
 
@@ -328,24 +377,27 @@
     }
 
     function procesar() {
-        const u = parseInt(document.getElementById('ans').value);
-        if(isNaN(u)) return;
+        const uInput = document.getElementById('ans').value;
+        if(uInput === "") return;
+        const u = parseInt(uInput);
 
         const fb = document.getElementById('feedback');
         if(u === estado.sol) {
             estado.aciertos++;
             fb.innerText = FRASES_BIEN[r(0, FRASES_BIEN.length-1)];
             fb.style.color = "var(--acierto)";
+            fb.style.textShadow = "0 0 10px var(--acierto)";
             animar('feedback', 'animate__heartBeat');
         } else {
             estado.fallos++;
-            fb.innerText = `Incorrecto (${estado.sol}). ` + FRASES_MAL[r(0, FRASES_MAL.length-1)];
+            fb.innerText = `Error: era ${estado.sol}`;
             fb.style.color = "var(--error)";
+            fb.style.textShadow = "0 0 10px var(--error)";
             animar('feedback', 'animate__shakeX');
         }
 
-        if(estado.actual >= MARCA.intentosTotales) setTimeout(terminar, 1600);
-        else setTimeout(siguiente, 1600);
+        if(estado.actual >= MARCA.intentosTotales) setTimeout(terminar, 1400);
+        else setTimeout(siguiente, 1400);
     }
 
     function terminar() {
@@ -358,8 +410,8 @@
     function pedirDemo() {
         const nombre = document.getElementById('nombre-inst').value;
         const tel = document.getElementById('tel-inst').value;
-        if(!nombre || !tel) return alert("Por favor llena los datos.");
-        const msg = `Hola, soy de la institución ${nombre}. Me interesa una demo del sistema. Tel: ${tel}`;
+        if(!nombre || !tel) return alert("Por favor complete los datos institucionales.");
+        const msg = `SISTEMA EDUGENIOS: Solicito cotización para el colegio ${nombre}. Contactar al: ${tel}.`;
         window.open(`https://wa.me/${MARCA.whatsapp}?text=${encodeURIComponent(msg)}`);
     }
 
@@ -368,5 +420,5 @@
     document.getElementById("ans").addEventListener("keyup", (e) => { if(e.key === "Enter") procesar(); });
 </script>
 
-</body>
+</body> 
 </html>
